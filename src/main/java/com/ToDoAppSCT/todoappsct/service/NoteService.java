@@ -18,4 +18,17 @@ public class NoteService {
     public List<Note>getAllNotesByIdUserAndIsCompleted(Long id_user, Integer is_completed){
         return noteRepository.getAllNotesByIdUserAndIsCompleted(id_user,is_completed);
     }
+
+    public Note save(Note note) {
+        return noteRepository.save(note);
+    }
+
+    public void deleteById(Long id) {
+        noteRepository.deleteById(id);
+    }
+
+    public Note update(Note note) {
+        return noteRepository.save(note);
+    }
+
 }
