@@ -44,4 +44,12 @@ public class NoteController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> updateNote(@PathVariable Long id,@RequestBody Note note){
+        note.setId_note(id);
+        Note updatedNote = noteService.save(note);
+        ApiResponse response = ApiResponse.builder().data(updatedNote).message("Note updated successfully").build();
+        return ResponseEntity.ok(response);
+    }
+
 }
