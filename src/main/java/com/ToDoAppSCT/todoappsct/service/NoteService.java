@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,10 @@ public class NoteService {
 
     public List<Note>getAllNotesByIdUserAndIsCompleted(Long id_user, Integer is_completed){
         return noteRepository.getAllNotesByIdUserAndIsCompleted(id_user,is_completed);
+    }
+
+    public Optional<Note> findByIdUserAndIdNote(Long id_user, Long id_note) {
+        return noteRepository.findByIdUserAndIdNote(id_user, id_note);
     }
 
     public Note save(Note note) {

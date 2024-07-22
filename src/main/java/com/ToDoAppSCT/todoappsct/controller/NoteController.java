@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,12 +45,19 @@ public class NoteController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateNote(@PathVariable Long id,@RequestBody Note note){
-        note.setId_note(id);
-        Note updatedNote = noteService.save(note);
-        ApiResponse response = ApiResponse.builder().data(updatedNote).message("Note updated successfully").build();
-        return ResponseEntity.ok(response);
+    @PutMapping(value = "v1/update-note/{id_user}/{id_note}")
+    public ResponseEntity<?> updateNote(@PathVariable Long id_user, @PathVariable Long id_note, @RequestBody Note note) {
+        Optional<Note> existingNoteOpt = noteService.findByIdUserAndIdNote(id_user, id_note);
+        if (existingNoteOpt.isPresent()) {
+            Note existingNote = existingNoteOpt.get();
+            existingNote.setContent(note.getContent());
+            existingNote.setIs_completed(note.getIs_completed());
+            Note updatedNote = noteService.save(existingNote);
+            ApiResponse response = ApiResponse.builder().data(updatedNote).message("Note updated successfully").build();
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(404).body("Note not found");
+        }
     }
 
 }

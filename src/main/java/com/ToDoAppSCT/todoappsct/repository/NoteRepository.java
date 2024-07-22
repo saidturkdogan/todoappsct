@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface NoteRepository extends JpaRepository<Note, Long> {
     @Query("select n from Note n where n.id_user = :id_user")
@@ -20,6 +21,9 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     @Query("select n from Note n where n.id_user = :id_user and n.content like %:content%")
     List<Note> getAllNotesByIdUserAndContent(@Param("id_user") Long id_user, @Param("content") String content);
+
+    @Query("select n from Note n where n.id_user = :id_user and n.id_note = :id_note")
+    Optional<Note> findByIdUserAndIdNote(@Param("id_user") Long id_user, @Param("id_note") Long id_note);
 
 
 
