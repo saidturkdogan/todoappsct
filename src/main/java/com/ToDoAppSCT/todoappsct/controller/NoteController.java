@@ -28,7 +28,7 @@ public class NoteController {
         else{
             noteList = noteService.getAllNotesByIdUserAndIsCompleted(getNotesRequestDTO.getId_user(),getNotesRequestDTO.getIs_completed());
         }
-
+        
         ApiResponse response = ApiResponse.builder().data(noteList).build();
         return ResponseEntity.ok(response);
     }
