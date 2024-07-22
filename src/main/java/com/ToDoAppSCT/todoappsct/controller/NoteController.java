@@ -2,7 +2,9 @@ package com.ToDoAppSCT.todoappsct.controller;
 
 import com.ToDoAppSCT.todoappsct.ApiResponse;
 import com.ToDoAppSCT.todoappsct.DTO.request.CreateNoteRequestDTO;
+import com.ToDoAppSCT.todoappsct.DTO.request.DeleteNoteRequestDTO;
 import com.ToDoAppSCT.todoappsct.DTO.request.GetNotesRequestDTO;
+import com.ToDoAppSCT.todoappsct.DTO.request.NoteUpdateRequestDTO;
 import com.ToDoAppSCT.todoappsct.model.Note;
 import com.ToDoAppSCT.todoappsct.service.NoteService;
 import lombok.RequiredArgsConstructor;
@@ -45,13 +47,13 @@ public class NoteController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping(value = "v1/update-note/{id_user}/{id_note}")
-    public ResponseEntity<?> updateNote(@PathVariable Long id_user, @PathVariable Long id_note, @RequestBody Note note) {
-        Optional<Note> existingNoteOpt = noteService.findByIdUserAndIdNote(id_user, id_note);
+    @PutMapping(value = "v1/update-note")
+    public ResponseEntity<?> updateNote(@RequestBody NoteUpdateRequestDTO noteUpdateRequestDTO) {
+        Optional<Note> existingNoteOpt = noteService.findByIdUserAndIdNote(noteUpdateRequestDTO.getId_user(), noteUpdateRequestDTO.getId_note());
         if (existingNoteOpt.isPresent()) {
             Note existingNote = existingNoteOpt.get();
-            existingNote.setContent(note.getContent());
-            existingNote.setIs_completed(note.getIs_completed());
+            existingNote.setContent(noteUpdateRequestDTO.getContent());
+            existingNote.setIs_completed(noteUpdateRequestDTO.getIs_completed());
             Note updatedNote = noteService.save(existingNote);
             ApiResponse response = ApiResponse.builder().data(updatedNote).message("Note updated successfully").build();
             return ResponseEntity.ok(response);
@@ -60,4 +62,16 @@ public class NoteController {
         }
     }
 
+    @DeleteMapping(value = "v1/delete-note")
+    public ResponseEntity<?> deleteNote(@RequestBody DeleteNoteRequestDTO deleteNoteRequestDTO) {
+        Optional<Note> existingNoteOpt = noteService.findByIdUserAndIdNote(deleteNoteRequestDTO.getId_user(), deleteNoteRequestDTO.getId_note());
+        if (existingNoteOpt.isPresent()) {
+            Note existingNote = existingNoteOpt.get();
+            noteService.delete(existingNote);
+            ApiResponse response = ApiResponse.builder().message("Note deleted successfully").build();
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(404).body("Note not found");
+        }
+    }
 }

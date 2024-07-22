@@ -36,4 +36,7 @@ public class NoteService {
         return noteRepository.save(note);
     }
 
+    public void delete(Note existingNote) {
+        noteRepository.delete(existingNote);
+    }
 }
