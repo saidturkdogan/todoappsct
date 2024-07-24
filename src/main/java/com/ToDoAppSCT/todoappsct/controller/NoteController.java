@@ -20,6 +20,7 @@ import java.util.Optional;
 @RequestMapping("/api/")
 public class NoteController {
     private final NoteService noteService;
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(value = "v1/get-notes")
     public ResponseEntity<?> getNotes(@RequestBody GetNotesRequestDTO getNotesRequestDTO){
         List<Note>noteList = new ArrayList<>();
@@ -34,6 +35,7 @@ public class NoteController {
         return ResponseEntity.ok(response);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(value = "v1/add-note")
     public ResponseEntity<?> addNote(@RequestBody CreateNoteRequestDTO createNoteRequestDTO){
         Note newNote = Note.builder()
@@ -47,6 +49,7 @@ public class NoteController {
         return ResponseEntity.ok(response);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping(value = "v1/update-note")
     public ResponseEntity<?> updateNote(@RequestBody NoteUpdateRequestDTO noteUpdateRequestDTO) {
         Optional<Note> existingNoteOpt = noteService.findByIdUserAndIdNote(noteUpdateRequestDTO.getId_user(), noteUpdateRequestDTO.getId_note());
@@ -62,6 +65,7 @@ public class NoteController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @DeleteMapping(value = "v1/delete-note")
     public ResponseEntity<?> deleteNote(@RequestBody DeleteNoteRequestDTO deleteNoteRequestDTO) {
         Optional<Note> existingNoteOpt = noteService.findByIdUserAndIdNote(deleteNoteRequestDTO.getId_user(), deleteNoteRequestDTO.getId_note());

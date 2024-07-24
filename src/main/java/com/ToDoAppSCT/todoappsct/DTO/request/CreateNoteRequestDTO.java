@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+
 public class CreateNoteRequestDTO {
     private String content;
     private Integer is_completed;
