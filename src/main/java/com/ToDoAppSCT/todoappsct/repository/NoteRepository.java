@@ -25,6 +25,11 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     @Query("select n from Note n where n.id_user = :id_user and n.id_note = :id_note")
     Optional<Note> findByIdUserAndIdNote(@Param("id_user") Long id_user, @Param("id_note") Long id_note);
 
+    @Query("SELECT n FROM Note n WHERE n.is_completed = :isCompleted")
+    List<Note> findAllByIsCompleted(@Param("isCompleted") int isCompleted);
+
+
+
 
 
 
