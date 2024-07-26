@@ -4,9 +4,8 @@ import lombok.Data;
 
 @Data
 public class UpdateNoteRequestDTO {
-
+    private Long id_user;
     private Long id_note;
     private String content;
     private Integer is_completed;
-
 }

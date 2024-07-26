@@ -86,6 +86,7 @@ public class NoteController {
         Note newNote = Note.builder()
                 .content(createNoteRequestDTO.getContent())
                 .is_completed(createNoteRequestDTO.getIs_completed())
+                .id_user(1L)
                 .build();
 
         Note savedNote = noteService.save(newNote);

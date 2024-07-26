@@ -11,9 +11,7 @@ import lombok.*;
 @ToString
 
 public class CreateNoteRequestDTO {
-    private Long id_user = 1L;
+    private Long id_user;
     private String content;
     private Integer is_completed;
-
-
 }
