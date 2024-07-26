@@ -47,13 +47,10 @@ public class NoteController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(value = "v1/get-notesbyid")
-    public Note getNotesbyNoteid(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO)
-    {
-        var asd=33;
+    public Note getNotesbyNoteid(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO) {
+        var id = Integer.parseInt(updateNoteRequestDTO.getId_note().toString());
 
-        var id=Integer.parseInt(updateNoteRequestDTO.getId_note().toString());
-
-        Note  note = noteService.getNotebyId(id);
+        Note  note = noteService.getNotebyId((long) id);
 
         return note;
     }
@@ -62,9 +59,24 @@ public class NoteController {
     @GetMapping(value = "v1/get-notesAlldata")
     public List<Note> getNotesAllData()
     {
-
         return noteService.getNoteAllNote();
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping(value = "v1/findAllByIsCompleted")
+    public List<Note> findAllByIsCompletedNote(@RequestBody GetIsCompletedNotes getIsCompletedNotes) {
+
+        if (getIsCompletedNotes.getIs_completed() == 1) {
+            return noteService.findAllByIsCompleted(getIsCompletedNotes.getIs_completed());
+        }
+        else if (Integer.parseInt(getIsCompletedNotes.getIs_completed().toString()) == 2) {
+            return noteService.findAllByIsCompleted(Integer.parseInt(getIsCompletedNotes.getIs_completed().toString()));
+        }
+        else {
+            return noteService.getNoteAllNote();
+        }
+    }
+
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(value = "v1/add-note")
@@ -84,31 +96,40 @@ public class NoteController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping(value = "v1/findAllByIsCompleted")
-    public List<Note> findAllByIsCompletedNote(@RequestBody GetIsCompletedNotes getIsCompletedNotes) {
-
-        if (Integer.parseInt(getIsCompletedNotes.getIs_completed().toString()) == 1) {
-           return noteService.findAllByIsCompleted(Integer.parseInt(getIsCompletedNotes.getIs_completed().toString()));
-        }
-        else if (Integer.parseInt(getIsCompletedNotes.getIs_completed().toString()) == 2) {
-            return noteService.findAllByIsCompleted(Integer.parseInt(getIsCompletedNotes.getIs_completed().toString()));
-        }
-        else {
-            return noteService.getNoteAllNote();
-        }
-    }
-
-    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping(value = "v1/update-note")
-    public ResponseEntity<?> updateNote(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO) {
-        Optional<Note> optionalNote = noteService.findById(updateNoteRequestDTO.getId_note());
-        return null;
+    public ResponseEntity<?> updateNoteNoteById(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO) {
+        Note updatedNote = noteService.updateNoteById(
+                updateNoteRequestDTO.getId_note(),
+                updateNoteRequestDTO.getContent(),
+                updateNoteRequestDTO.getIs_completed()
+        );
+        if (updatedNote != null) {
+            return ResponseEntity.ok(updatedNote);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     @CrossOrigin(origins = "http://localhost:3000")
     @DeleteMapping(value = "v1/delete-note")
-    public ResponseEntity<?> deleteNote(@RequestBody DeleteNoteRequestDTO deleteNoteRequestDTO) {
-        return null;
+    public ResponseEntity<Void> deleteNoteById(@RequestBody DeleteNoteRequestDTO deleteNoteRequestDTO) {
+        var id = deleteNoteRequestDTO.getId_note();
+        noteService.deleteNoteById(id);
+        return ResponseEntity.noContent().build();
+    }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @DeleteMapping(value = "v1/delete-all-notes")
+    public ResponseEntity<Void> deleteAllNotes() {
+        noteService.deleteAllNotes();
+        return ResponseEntity.noContent().build();
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @DeleteMapping(value = "v1/delete-all-done-notes")
+    public ResponseEntity<Void> deleteAllDoneNotes() {
+        noteService.deleteAllDoneNotes();
+        return ResponseEntity.noContent().build();
     }
 }

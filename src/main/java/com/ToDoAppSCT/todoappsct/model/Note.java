@@ -26,6 +26,6 @@ public class Note {
     private Integer is_completed;
     @Basic
     @Column(name = "id_user")
-    private Long id_user;
+    private Long id_user = 1L;
 
 }
