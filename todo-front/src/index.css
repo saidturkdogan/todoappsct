@@ -1,0 +1,126 @@
+body{
+  background-color: #544c4c;
+}
+.to-do-list{
+  font-family: Arial,sans-serif;
+  text-align: center;
+  margin-top: 100px;
+}
+
+h1{
+  font-size: 4rem;
+  color: white;
+}
+
+button{
+  font-size: 1.7rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+.add-button{
+  margin-left: 10px;
+  padding: 8px 12px;
+ background-color: green;
+}
+.add-button:hover{
+  background-color: lightgreen;
+}
+.delete-button{
+  background-color: crimson;
+}
+
+.delete-button:hover{
+background-color: firebrick;
+}
+
+.move-button{
+  background-color: cornflowerblue;
+}
+
+.move-button:hover{
+  background-color: deepskyblue;
+}
+.edit-button{
+  padding: 5px;
+  margin-left: 10px;
+  background-color: #ee8223;
+}
+.edit-button:hover{
+  background-color: #ff9a3b;
+}
+
+.delete-all-done-button{
+  background-color: crimson;
+}
+.delete-all-done-button:hover{
+  background-color: #8f132a;
+}
+.delete-all-button{
+  margin-left: 12px;
+  background-color: crimson;
+}
+
+.delete-all-button:hover{
+background-color: #8f132a;
+}
+
+.filter-button{
+  margin-left: 12px;
+ background-color: blue;
+}
+
+
+input[type="text"]{
+  font-size: 1.6rem;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  color: black;
+  margin-bottom: 12px;
+}
+ol{
+  padding: 0;
+}
+li{
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 15px;
+  background-color: lightgoldenrodyellow;
+  margin-bottom: 10px;
+  border: 3px solid wheat;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+
+}
+.text{
+  flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
+}
+
+.delete-button,.move-button,update-button{
+  padding: 8px 12px;
+  font-size: 1.4rem;
+  margin-left: 10px;
+}
+
+.completed .text {
+  text-decoration: line-through;
+}
+
+.save-button{
+  background-color: darkslategray;
+  margin-left: 10px;
+  padding: 8px 12px;
+}
+input[type="checkbox"] {
+  transform: scale(1.5); /* 1.5 kat büyütme */
+  /* Diğer stil özellikleri ekleyebilirsiniz */
+}
