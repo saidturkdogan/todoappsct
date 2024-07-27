@@ -17,7 +17,7 @@ import java.util.*;
 @RequestMapping("/api/")
 public class NoteController {
     private final NoteService noteService;
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "v1/get-notes")
     public ResponseEntity<?> getNotes(@RequestBody GetNotesRequestDTO getNotesRequestDTO)
     {
@@ -45,7 +45,7 @@ public class NoteController {
         return null;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(value = "v1/get-notesbyid")
     public Note getNotesbyNoteid(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO) {
         var id = Integer.parseInt(updateNoteRequestDTO.getId_note().toString());
@@ -55,14 +55,14 @@ public class NoteController {
         return note;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "v1/get-notesAlldata")
     public List<Note> getNotesAllData()
     {
         return noteService.getNoteAllNote();
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(value = "v1/findAllByIsCompleted")
     public List<Note> findAllByIsCompletedNote(@RequestBody GetIsCompletedNotes getIsCompletedNotes) {
 
@@ -78,14 +78,14 @@ public class NoteController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(value = "v1/add-note")
     public ResponseEntity<?> addNote(@RequestBody CreateNoteRequestDTO createNoteRequestDTO)
     {
 
         Note newNote = Note.builder()
                 .content(createNoteRequestDTO.getContent())
-                .is_completed(createNoteRequestDTO.getIs_completed())
+                .is_completed(2)
                 .id_user(1L)
                 .build();
 
@@ -96,7 +96,7 @@ public class NoteController {
         return ResponseEntity.ok(response);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping(value = "v1/update-note")
     public ResponseEntity<?> updateNoteNoteById(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO) {
         Note updatedNote = noteService.updateNoteById(
@@ -112,7 +112,7 @@ public class NoteController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping(value = "v1/delete-note")
     public ResponseEntity<Void> deleteNoteById(@RequestBody DeleteNoteRequestDTO deleteNoteRequestDTO) {
         var id = deleteNoteRequestDTO.getId_note();
@@ -120,14 +120,14 @@ public class NoteController {
         return ResponseEntity.noContent().build();
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping(value = "v1/delete-all-notes")
     public ResponseEntity<Void> deleteAllNotes() {
         noteService.deleteAllNotes();
         return ResponseEntity.noContent().build();
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping(value = "v1/delete-all-done-notes")
     public ResponseEntity<Void> deleteAllDoneNotes() {
         noteService.deleteAllDoneNotes();
