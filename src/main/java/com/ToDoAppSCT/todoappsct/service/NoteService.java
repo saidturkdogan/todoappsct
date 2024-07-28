@@ -1,5 +1,6 @@
 package com.ToDoAppSCT.todoappsct.service;
 
+import com.ToDoAppSCT.todoappsct.DTO.request.UpdateNoteRequestDTO;
 import com.ToDoAppSCT.todoappsct.model.Note;
 import com.ToDoAppSCT.todoappsct.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -66,14 +67,17 @@ public class NoteService {
         return noteRepository.getNoteByNoteId(id_note);
     }
 
-    public Note updateNoteById(Long id_note, String content, int is_completed) {
-        Note note = noteRepository.getNoteByNoteId(id_note);
-        if (note != null) {
-            note.setContent(content);
-            note.setIs_completed(is_completed);
-            noteRepository.save(note);
+    public Note updateNote(UpdateNoteRequestDTO updateNoteRequestDTO) {
+        if (updateNoteRequestDTO.getId_note() == null) {
+            throw new IllegalArgumentException("The given id must not be null");
         }
-        return note;
+
+        Note existingNote = noteRepository.findById(updateNoteRequestDTO.getId_note())
+                .orElseThrow(() -> new ResourceNotFoundException("Note not found with id: " + updateNoteRequestDTO.getId_note()));
+        existingNote.setContent(updateNoteRequestDTO.getContent());
+        existingNote.setIs_completed(updateNoteRequestDTO.getIs_completed()); // Integer kullanımı
+        existingNote.setId_user(updateNoteRequestDTO.getId_user() != null ? updateNoteRequestDTO.getId_user() : 1); // Default değeri 1 olarak ayarla
+        return noteRepository.save(existingNote);
     }
 
     @Transactional

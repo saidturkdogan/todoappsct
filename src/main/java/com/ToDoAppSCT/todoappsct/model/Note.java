@@ -1,16 +1,15 @@
 package com.ToDoAppSCT.todoappsct.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Builder
+@Getter
+@Setter
 @Table(name = "note")
 
 public class Note {
@@ -27,5 +26,7 @@ public class Note {
     @Basic
     @Column(name = "id_user")
     private Long id_user;
+
+
 
 }

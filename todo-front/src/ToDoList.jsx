@@ -122,16 +122,34 @@ function ToDoList() {
     }
 
     async function saveTask() {
+        if (editingIndex === null) return;
         try {
             const updatedTask = { ...tasks[editingIndex], text: editingTask };
-            setTasks(t => {
-                const newTasks = [...t];
-                newTasks[editingIndex] = updatedTask;
-                return newTasks;
-            });
-            await axios.put(`http://localhost:8080/api/v1/tasks/${tasks[editingIndex].id}`, { content: editingTask, isCompleted: tasks[editingIndex].isCompleted });
-            setEditingIndex(null);
-            setEditingTask("");
+            const requestBody = {
+                id_note: updatedTask.id, // id yerine id_note
+                content: editingTask,
+                is_completed: updatedTask.isCompleted ? 1 : 0, // Boolean'ı integer'a çevirme
+                id_user: updatedTask.id_user // id_user'ı ekleyelim
+            };
+            console.log("Sending data:", requestBody);
+
+            const response = await axios.put(`http://localhost:8080/api/v1/update-note`, requestBody);
+
+            console.log("Received response:", response.data);
+
+            if (response.status === 200) {
+                setTasks(prevTasks => {
+                    const newTasks = [...prevTasks];
+                    newTasks[editingIndex] = {
+                        ...updatedTask,
+                        text: response.data.content,
+                        isCompleted: response.data.is_completed === 1 // Integer'ı boolean'a çevirme
+                    };
+                    return newTasks;
+                });
+                setEditingIndex(null);
+                setEditingTask("");
+            }
         } catch (error) {
             console.error("Error saving task:", error);
         }
@@ -186,7 +204,7 @@ function ToDoList() {
                             </>
                         ) : (
                             <>
-                                <input
+                            <input
                                     type="checkbox"
                                     checked={task.isCompleted === 2}
                                     onChange={() => updateTask(index)}

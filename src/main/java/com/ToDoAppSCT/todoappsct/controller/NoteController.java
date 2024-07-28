@@ -98,17 +98,11 @@ public class NoteController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping(value = "v1/update-note")
-    public ResponseEntity<?> updateNoteNoteById(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO) {
-        Note updatedNote = noteService.updateNoteById(
-                updateNoteRequestDTO.getId_note(),
-                updateNoteRequestDTO.getContent(),
-                updateNoteRequestDTO.getIs_completed()
-        );
-        if (updatedNote != null) {
-            return ResponseEntity.ok(updatedNote);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Note> updateNote(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO) {
+        // Loglama ekleyerek noteDto'nun içeriğini kontrol edelim
+        System.out.println("Received NoteDto: " + updateNoteRequestDTO);
+        Note updatedNote = noteService.updateNote(updateNoteRequestDTO);
+        return ResponseEntity.ok(updatedNote);
     }
 
 
