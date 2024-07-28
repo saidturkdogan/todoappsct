@@ -85,7 +85,7 @@ public class NoteController {
 
         Note newNote = Note.builder()
                 .content(createNoteRequestDTO.getContent())
-                .is_completed(2)
+                .is_completed(1)
                 .id_user(1L)
                 .build();
 
@@ -107,11 +107,11 @@ public class NoteController {
 
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @DeleteMapping(value = "v1/delete-note")
-    public ResponseEntity<Void> deleteNoteById(@RequestBody DeleteNoteRequestDTO deleteNoteRequestDTO) {
-        var id = deleteNoteRequestDTO.getId_note();
-        noteService.deleteNoteById(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/v1/delete-note")
+    public ResponseEntity<?> deleteNote(@RequestBody Map<String, Long> payload) {
+        Long idNote = payload.get("id_note");
+        noteService.deleteNoteById(idNote);
+        return ResponseEntity.ok().build();
     }
 
     @CrossOrigin(origins = "http://localhost:5173")

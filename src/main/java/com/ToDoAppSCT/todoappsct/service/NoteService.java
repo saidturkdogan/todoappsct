@@ -75,8 +75,8 @@ public class NoteService {
         Note existingNote = noteRepository.findById(updateNoteRequestDTO.getId_note())
                 .orElseThrow(() -> new ResourceNotFoundException("Note not found with id: " + updateNoteRequestDTO.getId_note()));
         existingNote.setContent(updateNoteRequestDTO.getContent());
-        existingNote.setIs_completed(updateNoteRequestDTO.getIs_completed()); // Integer kullanımı
-        existingNote.setId_user(updateNoteRequestDTO.getId_user() != null ? updateNoteRequestDTO.getId_user() : 1); // Default değeri 1 olarak ayarla
+        existingNote.setIs_completed(updateNoteRequestDTO.getIs_completed());
+        existingNote.setId_user(updateNoteRequestDTO.getId_user() != null ? updateNoteRequestDTO.getId_user() : 1);
         return noteRepository.save(existingNote);
     }
 

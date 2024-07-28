@@ -13,7 +13,7 @@ public class UpdateNoteRequestDTO {
 
     @Override
     public String toString() {
-        return "NoteDto{" +
+        return "UpdateNoteRequestDTO{" +
                 "id_note=" + id_note +
                 ", content='" + content + '\'' +
                 ", is_completed=" + is_completed +

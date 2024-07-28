@@ -16,9 +16,10 @@ function ToDoList() {
         try {
             const response = await axios.get("http://localhost:8080/api/v1/get-notesAlldata");
             const fetchedTasks = response.data.map(task => ({
-                id: task.id,
+                id: task.id_note, // id yerine id_note kullanın
+                id_note: task.id_note, // id_note'u ekleyin
                 text: task.content,
-                isCompleted: task.isCompleted
+                isCompleted: task.is_completed // is_completed kullanın
             }));
             setTasks(fetchedTasks);
         } catch (error) {
@@ -35,17 +36,18 @@ function ToDoList() {
     }
 
     async function addTask() {
-        if (!newTask.trim()) return; // Boş görev eklemeyi önle
+        if (!newTask.trim()) return;
         try {
-            const response = await axios.post("http://localhost:8080/api/v1/add-note", { content: newTask, isCompleted: 0 });
+            const response = await axios.post("http://localhost:8080/api/v1/add-note", { content: newTask, is_completed: 1 });
             const addedTask = {
-                id: response.data.id,
-                text: response.data.content, // API'den dönen içeriği kullan
-                isCompleted: response.data.isCompleted
+                id: response.data.id_note,
+                id_note: response.data.id_note,
+                text: response.data.content,
+                isCompleted: response.data.is_completed
             };
             setTasks(prevTasks => [...prevTasks, addedTask]);
             setNewTask("");
-            getTasks();
+            getTasks()
         } catch (error) {
             console.error("Error adding task:", error);
         }
@@ -53,8 +55,11 @@ function ToDoList() {
 
     async function deleteTask(index) {
         try {
-            await axios.delete('http://localhost:8080/api/v1/delete-note');
-            setTasks(tasks.filter((_, i) => i !== index));
+            const taskToDelete = tasks[index];
+            await axios.delete('http://localhost:8080/api/v1/delete-note', {
+                data: { id_note: taskToDelete.id_note }
+            });
+            setTasks(prevTasks => prevTasks.filter((_, i) => i !== index));
         } catch (error) {
             console.error("Error deleting task:", error);
         }
@@ -86,13 +91,25 @@ function ToDoList() {
 
     async function updateTask(index) {
         try {
-            const updatedTask = { ...tasks[index], isCompleted: (tasks[index].isCompleted + 1) % 3 };
+            const updatedTask = {
+                ...tasks[index],
+                is_completed: tasks[index].isCompleted === 1 ? 2 : 1
+            };
+            const response = await axios.put('http://localhost:8080/api/v1/update-note', {
+                id_note: updatedTask.id_note,
+                content: updatedTask.text,
+                is_completed: updatedTask.is_completed,
+                id_user: updatedTask.id_user || 1
+            });
             setTasks(t => {
                 const newTasks = [...t];
-                newTasks[index] = updatedTask;
+                newTasks[index] = {
+                    ...response.data,
+                    text: response.data.content,
+                    isCompleted: response.data.is_completed
+                };
                 return newTasks;
             });
-            await axios.put('http://localhost:8080/api/v1/v1/update-note', updatedTask);
         } catch (error) {
             console.error("Error updating task:", error);
         }
@@ -101,7 +118,8 @@ function ToDoList() {
     async function deleteAllDoneTasks() {
         try {
             await axios.delete("http://localhost:8080/api/v1/delete-all-done-notes");
-            setTasks(tasks.filter(task => task.isCompleted !== 2));
+            setTasks(tasks.filter(task => task.isCompleted == 2));
+            getTasks()
         } catch (error) {
             console.error("Error deleting all done tasks:", error);
         }
@@ -126,10 +144,10 @@ function ToDoList() {
         try {
             const updatedTask = { ...tasks[editingIndex], text: editingTask };
             const requestBody = {
-                id_note: updatedTask.id, // id yerine id_note
+                id_note: updatedTask.id_note,
                 content: editingTask,
-                is_completed: updatedTask.isCompleted ? 1 : 0, // Boolean'ı integer'a çevirme
-                id_user: updatedTask.id_user // id_user'ı ekleyelim
+                is_completed: updatedTask.isCompleted,
+                id_user: updatedTask.id_user || 1
             };
             console.log("Sending data:", requestBody);
 
@@ -142,8 +160,9 @@ function ToDoList() {
                     const newTasks = [...prevTasks];
                     newTasks[editingIndex] = {
                         ...updatedTask,
+                        id_note: response.data.id_note,
                         text: response.data.content,
-                        isCompleted: response.data.is_completed === 1 // Integer'ı boolean'a çevirme
+                        isCompleted: response.data.is_completed
                     };
                     return newTasks;
                 });
@@ -159,7 +178,7 @@ function ToDoList() {
         if (filter === "Done") {
             return tasks.filter(task => task.isCompleted === 2);
         } else if (filter === "Todo") {
-            return tasks.filter(task => task.isCompleted === 0);
+            return tasks.filter(task => task.isCompleted === 1);
         } else {
             return tasks;
         }
@@ -209,6 +228,7 @@ function ToDoList() {
                                     checked={task.isCompleted === 2}
                                     onChange={() => updateTask(index)}
                                 />
+
                                 <span className="text">{task.text}</span>
                                 <button
                                     className="delete-button"

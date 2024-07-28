@@ -39,17 +39,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     @Modifying
     void deleteAllNotes();
 
-    @Query("DELETE FROM Note n WHERE n.is_completed = 1")
+    @Query("DELETE FROM Note n WHERE n.is_completed = 2")
     @Modifying
     void deleteAllDoneNotes();
-
-
-
-
-
-
-
-
-
-
 }
