@@ -19,8 +19,7 @@ public class NoteController {
     private final NoteService noteService;
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "v1/get-notes")
-    public ResponseEntity<?> getNotes(@RequestBody GetNotesRequestDTO getNotesRequestDTO)
-    {
+    public ResponseEntity<?> getNotes(@RequestBody GetNotesRequestDTO getNotesRequestDTO) {
         List<Note>noteList = new ArrayList<>();
     /*
         if (getNotesRequestDTO.getIs_completed() == null || getNotesRequestDTO.getIs_completed() == -1){
@@ -47,7 +46,7 @@ public class NoteController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(value = "v1/get-notesbyid")
-    public Note getNotesbyNoteid(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO) {
+    public Note getNotesbyNoteid(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO){
         var id = Integer.parseInt(updateNoteRequestDTO.getId_note().toString());
 
         Note  note = noteService.getNotebyId((long) id);
@@ -57,15 +56,13 @@ public class NoteController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "v1/get-notesAlldata")
-    public List<Note> getNotesAllData()
-    {
+    public List<Note> getNotesAllData() {
         return noteService.getNoteAllNote();
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(value = "v1/findAllByIsCompleted")
     public List<Note> findAllByIsCompletedNote(@RequestBody GetIsCompletedNotes getIsCompletedNotes) {
-
         if (getIsCompletedNotes.getIs_completed() == 1) {
             return noteService.findAllByIsCompleted(getIsCompletedNotes.getIs_completed());
         }
@@ -77,29 +74,22 @@ public class NoteController {
         }
     }
 
-
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(value = "v1/add-note")
-    public ResponseEntity<?> addNote(@RequestBody CreateNoteRequestDTO createNoteRequestDTO)
-    {
-
+    public ResponseEntity<?> addNote(@RequestBody CreateNoteRequestDTO createNoteRequestDTO) {
         Note newNote = Note.builder()
                 .content(createNoteRequestDTO.getContent())
                 .is_completed(1)
                 .id_user(1L)
                 .build();
-
         Note savedNote = noteService.save(newNote);
-
         ApiResponse response = ApiResponse.builder().data(savedNote).message("Note added successfully").build();
-
         return ResponseEntity.ok(response);
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping(value = "v1/update-note")
     public ResponseEntity<Note> updateNote(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO) {
-        // Loglama ekleyerek noteDto'nun içeriğini kontrol edelim
         System.out.println("Received NoteDto: " + updateNoteRequestDTO);
         Note updatedNote = noteService.updateNote(updateNoteRequestDTO);
         return ResponseEntity.ok(updatedNote);
