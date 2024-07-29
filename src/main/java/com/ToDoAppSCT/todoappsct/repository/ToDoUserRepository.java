@@ -9,6 +9,4 @@ import java.util.List;
 public interface ToDoUserRepository extends JpaRepository<ToDoUser, Long> {
     @Query("select tu from ToDoUser tu ")
     List<ToDoUser>getAllUsers();
-
-
 }
