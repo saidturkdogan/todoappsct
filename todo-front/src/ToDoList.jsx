@@ -16,10 +16,10 @@ function ToDoList() {
         try {
             const response = await axios.get("http://localhost:8080/api/v1/get-notesAlldata");
             const fetchedTasks = response.data.map(task => ({
-                id: task.id_note, // id yerine id_note kullanın
-                id_note: task.id_note, // id_note'u ekleyin
+                id: task.id_note,
+                id_note: task.id_note,
                 text: task.content,
-                isCompleted: task.is_completed // is_completed kullanın
+                isCompleted: task.is_completed
             }));
             setTasks(fetchedTasks);
         } catch (error) {
