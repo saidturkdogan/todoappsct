@@ -9,8 +9,6 @@ public class UpdateNoteRequestDTO {
     private Integer is_completed;
     private Long id_user;
 
-    // Getters and setters
-
     @Override
     public String toString() {
         return "UpdateNoteRequestDTO{" +

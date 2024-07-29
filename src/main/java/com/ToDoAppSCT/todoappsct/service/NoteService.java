@@ -16,13 +16,6 @@ import java.util.Optional;
 public class NoteService {
 
     private final NoteRepository noteRepository;
-    /*public List<Note>getAllNotesByIdUser(Long id_user){
-        return noteRepository.getAllNotesByIdUser(id_user);
-    }
-
-    public List<Note>getAllNotesByIdUserAndIsCompleted(Long id_user, Integer is_completed){
-        return noteRepository.getAllNotesByIdUserAndIsCompleted(id_user,is_completed);
-    }*/
 
     public List<Note> getAllNotes() {
         return noteRepository.findAll();
@@ -32,7 +25,6 @@ public class NoteService {
         return noteRepository.getNoteByNoteId(noteid);
     }
 
-
     public List<Note> getNoteAllNote() {
         return noteRepository.getNoteAllData();
     }
@@ -41,30 +33,13 @@ public class NoteService {
         return noteRepository.findAllByIsCompleted(isCompleted);
     }
 
-
-    public List<Note> getAllNotesByIsCompleted() {
-        return null ;//noteRepository.findAllByIsCompleted();
-    }
-
-
-
-    public Optional<Note> findById(Long id) {
-
-        return noteRepository.findById(id);
-    }
-
     public Note save(Note note)
     {
         return noteRepository.save(note);
     }
 
-
     public void deleteNoteById(Long id) {
         noteRepository.deleteById(id);
-    }
-
-    public Note getNoteByNoteId(Long id_note) {
-        return noteRepository.getNoteByNoteId(id_note);
     }
 
     public Note updateNote(UpdateNoteRequestDTO updateNoteRequestDTO) {
