@@ -17,6 +17,12 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     Note getNoteByNoteId(@Param("id_note") Long id_note);
     @Query("SELECT n FROM Note n")
     List<Note> getNoteAllData();
+
+    @Query("SELECT n FROM Note n WHERE n.is_completed = 2")
+    List<Note> getNotesDone(@Param("isCompleted")int isCompleted);
+    @Query("SELECT n FROM Note n WHERE n.is_completed = 1")
+    List<Note> getNotesTodo(@Param("isCompleted")int isCompleted);
+
     @Query("DELETE FROM Note n WHERE n.is_completed = 0 OR n.is_completed = 1 OR n.is_completed = 2")
     @Modifying
     void deleteAllNotes();

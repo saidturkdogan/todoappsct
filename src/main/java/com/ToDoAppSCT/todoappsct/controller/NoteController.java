@@ -43,16 +43,6 @@ public class NoteController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(value = "v1/get-notesbyid")
-    public Note getNotesbyNoteid(@RequestBody UpdateNoteRequestDTO updateNoteRequestDTO) {
-        var id = Integer.parseInt(updateNoteRequestDTO.getId_note().toString());
-
-        Note  note = noteService.getNotebyId((long) id);
-
-        return note;
-    }
-
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "v1/get-notesAlldata")
     public List<Note> getNotesAllData() {
         return noteService.getNoteAllNote();
