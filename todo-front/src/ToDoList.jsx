@@ -4,9 +4,9 @@ import axios from "axios";
 function ToDoList() {
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState("");
-    const [filter, setFilter] = useState("All");
     const [editingIndex, setEditingIndex] = useState(null);
     const [editingTask, setEditingTask] = useState("");
+    const [filter, setFilter] = useState("All");
 
     useEffect(() => {
         getTasks();
@@ -14,7 +14,7 @@ function ToDoList() {
 
     async function getTasks() {
         try {
-            const response = await axios.get("http://localhost:8080/api/v1/get-notesAlldata");
+            const response = await axios.get("http://localhost:8080/api/v1/get-notesalldata");
             const fetchedTasks = response.data.map(task => ({
                 id: task.id_note,
                 id_note: task.id_note,
@@ -24,6 +24,36 @@ function ToDoList() {
             setTasks(fetchedTasks);
         } catch (error) {
             console.error("Error fetching tasks:", error);
+        }
+    }
+
+    async function getDoneNotes() {
+        try {
+            const response = await axios.get("http://localhost:8080/api/v1/get-donenotes");
+            const fetchedTasks = response.data.map(task => ({
+                id: task.id_note,
+                id_note: task.id_note,
+                text: task.content,
+                isCompleted: task.is_completed
+            }));
+            setTasks(fetchedTasks);
+        } catch (error) {
+            console.error("Error fetching done tasks:", error);
+        }
+    }
+
+    async function getTodoNotes() {
+        try {
+            const response = await axios.get("http://localhost:8080/api/v1/get-todonotes");
+            const fetchedTasks = response.data.map(task => ({
+                id: task.id_note,
+                id_note: task.id_note,
+                text: task.content,
+                isCompleted: task.is_completed
+            }));
+            setTasks(fetchedTasks);
+        } catch (error) {
+            console.error("Error fetching todo tasks:", error);
         }
     }
 
@@ -47,7 +77,7 @@ function ToDoList() {
             };
             setTasks(prevTasks => [...prevTasks, addedTask]);
             setNewTask("");
-            getTasks()
+            getTasks();
         } catch (error) {
             console.error("Error adding task:", error);
         }
@@ -71,7 +101,6 @@ function ToDoList() {
             const newTasks = [...tasks];
             [newTasks[index - 1], newTasks[index]] = [newTasks[index], newTasks[index - 1]];
             setTasks(newTasks);
-            await axios.put("http://localhost:8080/api/v1/tasks/move-up", { index });
         } catch (error) {
             console.error("Error moving task up:", error);
         }
@@ -83,7 +112,6 @@ function ToDoList() {
             const newTasks = [...tasks];
             [newTasks[index + 1], newTasks[index]] = [newTasks[index], newTasks[index + 1]];
             setTasks(newTasks);
-            await axios.put("http://localhost:8080/api/v1/tasks/move-down", { index });
         } catch (error) {
             console.error("Error moving task down:", error);
         }
@@ -101,15 +129,24 @@ function ToDoList() {
                 is_completed: updatedTask.is_completed,
                 id_user: updatedTask.id_user || 1
             });
-            setTasks(t => {
-                const newTasks = [...t];
-                newTasks[index] = {
-                    ...response.data,
-                    text: response.data.content,
-                    isCompleted: response.data.is_completed
-                };
-                return newTasks;
-            });
+            if (response.status === 200) {
+                setTasks(prevTasks => {
+                    const newTasks = [...prevTasks];
+                    newTasks[index] = {
+                        ...updatedTask,
+                        text: response.data.content,
+                        isCompleted: response.data.is_completed
+                    };
+                    return newTasks;
+                });
+                if (filter === "Done") {
+                    getDoneNotes();
+                } else if (filter === "Todo") {
+                    getTodoNotes();
+                } else {
+                    getTasks();
+                }
+            }
         } catch (error) {
             console.error("Error updating task:", error);
         }
@@ -118,8 +155,8 @@ function ToDoList() {
     async function deleteAllDoneTasks() {
         try {
             await axios.delete("http://localhost:8080/api/v1/delete-all-done-notes");
-            setTasks(tasks.filter(task => task.isCompleted == 2));
-            getTasks()
+            setTasks(tasks.filter(task => task.isCompleted != 2));
+            getTasks();
         } catch (error) {
             console.error("Error deleting all done tasks:", error);
         }
@@ -168,19 +205,16 @@ function ToDoList() {
                 });
                 setEditingIndex(null);
                 setEditingTask("");
+                if (filter === "Done") {
+                    getDoneNotes();
+                } else if (filter === "Todo") {
+                    getTodoNotes();
+                } else {
+                    getTasks();
+                }
             }
         } catch (error) {
             console.error("Error saving task:", error);
-        }
-    }
-
-    function filteredTasks() {
-        if (filter === "Done") {
-            return tasks.filter(task => task.isCompleted === 2);
-        } else if (filter === "Todo") {
-            return tasks.filter(task => task.isCompleted === 1);
-        } else {
-            return tasks;
         }
     }
 
@@ -199,18 +233,18 @@ function ToDoList() {
                 </button>
             </div>
             <div>
-                <button className="filter-button" onClick={() => setFilter("All")}>
+                <button className="filter-button" onClick={() => { setFilter("All"); getTasks(); }}>
                     All
                 </button>
-                <button className="filter-button" onClick={() => setFilter("Done")}>
+                <button className="filter-button" onClick={() => { setFilter("Done"); getDoneNotes(); }}>
                     Done
                 </button>
-                <button className="filter-button" onClick={() => setFilter("Todo")}>
+                <button className="filter-button" onClick={() => { setFilter("Todo"); getTodoNotes(); }}>
                     Todo
                 </button>
             </div>
             <ol>
-                {filteredTasks().map((task, index) => (
+                {tasks.map((task, index) => (
                     <li key={index} className={task.isCompleted === 2 ? 'completed' : ''}>
                         {editingIndex === index ? (
                             <>
@@ -223,12 +257,11 @@ function ToDoList() {
                             </>
                         ) : (
                             <>
-                            <input
+                                <input
                                     type="checkbox"
                                     checked={task.isCompleted === 2}
                                     onChange={() => updateTask(index)}
                                 />
-
                                 <span className="text">{task.text}</span>
                                 <button
                                     className="delete-button"

@@ -14,54 +14,26 @@ import java.util.*;
 @RequestMapping("/api/")
 public class NoteController {
     private final NoteService noteService;
-    @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping(value = "v1/get-notes")
-    public ResponseEntity<?> getNotes(@RequestBody GetNotesRequestDTO getNotesRequestDTO)
-    {
-        List<Note>noteList = new ArrayList<>();
-    /*
-        if (getNotesRequestDTO.getIs_completed() == null || getNotesRequestDTO.getIs_completed() == -1){
-            noteList = noteService.getAllNotesByIdUser(getNotesRequestDTO.getId_user());
-        }
-        else{
-            noteList = noteService.getAllNotesByIdUserAndIsCompleted(getNotesRequestDTO.getId_user(),getNotesRequestDTO.getIs_completed());
-        }
-        
-        ApiResponse response = ApiResponse.builder().data(noteList).build();
-        return ResponseEntity.ok(response);
-
-    */
-        if (getNotesRequestDTO.getIs_completed() == null || getNotesRequestDTO.getIs_completed() == -1){
-            noteList = noteService.getAllNotes();
-        }
-        else {
-            noteList = noteService.getAllNotesByIsCompleted();
-        }
-
-
-        return null;
-    }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping(value = "v1/get-notesAlldata")
+    @GetMapping(value = "v1/get-notesalldata")
     public List<Note> getNotesAllData() {
         return noteService.getNoteAllNote();
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(value = "v1/findAllByIsCompleted")
-    public List<Note> findAllByIsCompletedNote(@RequestBody GetIsCompletedNotes getIsCompletedNotes) {
-
-        if (getIsCompletedNotes.getIs_completed() == 1) {
-            return noteService.findAllByIsCompleted(getIsCompletedNotes.getIs_completed());
-        }
-        else if (Integer.parseInt(getIsCompletedNotes.getIs_completed().toString()) == 2) {
-            return noteService.findAllByIsCompleted(Integer.parseInt(getIsCompletedNotes.getIs_completed().toString()));
-        }
-        else {
-            return noteService.getNoteAllNote();
-        }
+    @GetMapping(value = "v1/get-donenotes")
+    public List<Note> getDoneNotes() {
+        return noteService.getDoneNotes();
     }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping(value = "v1/get-todonotes")
+    public List<Note> getTodoNotes() {
+        return noteService.getTodoNotes();
+    }
+
+
 
 
     @CrossOrigin(origins = "http://localhost:5173")
