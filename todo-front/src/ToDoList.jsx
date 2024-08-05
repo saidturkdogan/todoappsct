@@ -253,7 +253,7 @@ function ToDoList() {
                                     value={editingTask}
                                     onChange={handleEditInputChange}
                                 />
-                                <button onClick={saveTask}>Save</button>
+                                <button className="save-button" onClick={saveTask}>Save</button>
                             </>
                         ) : (
                             <>

@@ -1,6 +1,7 @@
 package com.ToDoAppSCT.todoappsct.service;
 
 import com.ToDoAppSCT.todoappsct.DTO.request.UpdateNoteRequestDTO;
+import com.ToDoAppSCT.todoappsct.exception.ResourceNotFoundException;
 import com.ToDoAppSCT.todoappsct.model.Note;
 import com.ToDoAppSCT.todoappsct.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;

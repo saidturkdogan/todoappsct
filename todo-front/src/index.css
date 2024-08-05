@@ -5,6 +5,8 @@ body{
   font-family: Arial,sans-serif;
   text-align: center;
   margin-top: 100px;
+  width: 50%;
+  margin: 0 auto;
 }
 
 h1{
@@ -121,6 +123,9 @@ li{
   padding: 8px 12px;
 }
 input[type="checkbox"] {
-  transform: scale(1.5); /* 1.5 kat büyütme */
-  /* Diğer stil özellikleri ekleyebilirsiniz */
+  transform: scale(1.5);
+}
+
+.save-button{
+  background-color: darkslategray;
 }
