@@ -1,8 +1,9 @@
 body{
   background-color: #544c4c;
+  font-family: Consolas;
 }
 .to-do-list{
-  font-family: Arial,sans-serif;
+  font-family:Consolas;
   text-align: center;
   margin-top: 100px;
   width: 50%;
